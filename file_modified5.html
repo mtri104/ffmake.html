@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <title>AimLock Tool</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    html, body {
+      margin: 0; padding: 0;
+      height: 100%; background: #000;
+      font-family: 'Segoe UI', sans-serif;
+      overflow: hidden; color: #fff;
+    }
+
+    #particles-js {
+      position: fixed;
+      width: 100%; height: 100%;
+      z-index: 0;
+    }
+
+    .menu-toggle {
+      position: absolute;
+      top: 15px;
+      right: 15px;
+      background: transparent;
+      border: none;
+      font-size: 28px;
+      color: white;
+      z-index: 1001;
+      cursor: pointer;
+    }
+
+    .sidebar {
+      height: 100%;
+      width: 0;
+      position: fixed;
+      z-index: 1000;
+      top: 0;
+      right: 0;
+      background-color: rgba(50, 50, 50, 0.95);
+      overflow-x: hidden;
+      transition: 0.4s;
+      padding-top: 60px;
+      border-radius: 10px 0 0 10px;
+    }
+
+    .sidebar a {
+      padding: 12px 20px;
+      text-decoration: none;
+      font-size: 20px;
+      color: white;
+      display: block;
+      transition: 0.2s;
+    }
+
+    .sidebar a:hover {
+      background-color: #ff2a2a;
+    }
+
+    .section {
+      display: none;
+      position: absolute;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      background: rgba(20, 0, 0, 0.85);
+      padding: 25px;
+      border-radius: 15px;
+      box-shadow: 0 0 20px #ff2a2a;
+      flex-direction: column;
+      align-items: center;
+      z-index: 1;
+      width: 90%;
+      max-width: 320px;
+      gap: 15px;
+    }
+
+    .toggle-row {
+      display: flex;
+      justify-content: space-between;
+      width: 100%;
+      align-items: center;
+    }
+
+    label.switch {
+      position: relative;
+      display: inline-block;
+      width: 60px;
+      height: 28px;
+      animation: pop 0.3s ease;
+    }
+
+    label.switch input { display: none; }
+
+    .slider-toggle {
+      position: absolute;
+      cursor: pointer;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background-color: #444;
+      transition: .4s;
+      border-radius: 28px;
+    }
+
+    .slider-toggle:before {
+      position: absolute;
+      content: "";
+      height: 22px; width: 22px;
+      left: 3px; bottom: 3px;
+      background-color: white;
+      transition: .4s;
+      border-radius: 50%;
+    }
+
+    input:checked + .slider-toggle {
+      background: linear-gradient(45deg, #ff0000, #ff5555);
+      box-shadow: 0 0 10px #ff2a2a;
+    }
+
+    input:checked + .slider-toggle:before {
+      transform: translateX(32px);
+    }
+
+    .slider-container input[type=range] {
+      width: 120%;
+      accent-color: red;
+    }
+
+    .slider-container div {
+      margin-top: 5px;
+      text-align: center;
+    }
+
+    #notification {
+      position: fixed;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #111;
+      padding: 8px 16px;
+      border-radius: 8px;
+      display: none;
+      z-index: 999;
+      font-weight: bold;
+      color: #0f0;
+    }
+
+    @keyframes pop {
+      0% { transform: scale(0.8); opacity: 0; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+  </style>
+</head>
+<body>
+
+<div id="particles-js"></div>
+<div id="notification"></div>
+
+<audio id="soundOn" src="https://assets.mixkit.co/sfx/preview/mixkit-game-click-1114.mp3"></audio>
+<audio id="soundOff" src="https://assets.mixkit.co/sfx/preview/mixkit-click-error-1110.mp3"></audio>
+
+<button class="menu-toggle" onclick="openMenu()">☰</button>
+
+<div id="sideMenu" class="sidebar">
+  <a href="#" onclick="switchSection('main')">Main</a>
+  <a href="#" onclick="switchSection('setting')">Setting</a>
+  <a href="#" onclick="switchSection('mtricrack')">Mtricrack</a>
+</div>
+
+<div id="loginSection" class="section" style="display:flex;">
+  <h2>🔐 Nhập Key</h2>
+  <input type="Mtri" id="keyInput" placeholder="Nhập key...">
+  <button onclick="validateKey()">Xác nhận</button>
+</div>
+
+<div id="loadingSection" class="section">
+  <h2 id="loadingText">Đang khởi chạy... 0%</h2>
+  <div style="width: 100%; height: 10px; background: #330; border-radius: 8px;">
+    <div id="progressFill" style="height: 100%; width: 0%; background: #ff2a2a;"></div>
+  
+<div style="margin-top:20px; width:100%;">
+  <h3>📱 Liên hệ của tôi</h3>
+  <table style="width:100%; border-collapse:collapse; color:#fff;">
+    <tr>
+      <td style="padding:8px;">TikTok</td>
+      <td style="padding:8px; text-align:right;">
+        <a href="https://www.tiktok.com/@minh.tr432?_t=ZS-8zmMFO7mb7V&_r=1" target="_blank" style="color:#ff2a2a; text-decoration:none;">Xem</a>
+      </td>
+    </tr>
+    <tr>
+      <td style="padding:8px;">Facebook</td>
+      <td style="padding:8px; text-align:right;">
+        <a href="https://www.facebook.com/share/19SQEhejTB/?mibextid=wwXIfr" target="_blank" style="color:#ff2a2a; text-decoration:none;">Xem</a>
+      </td>
+    </tr>
+    <tr>
+      <td style="padding:8px;">Zalo</td>
+      <td style="padding:8px; text-align:right;">
+        <a href="https://zalo.me/0822269369" target="_blank" style="color:#ff2a2a; text-decoration:none;">Xem</a>
+      </td>
+    </tr>
+  </table>
+</div>
+
+</div>
+</div>
+
+<div id="mainSection" class="section">
+  <h2>🎮 AimLock Menu</h2>
+  <div class="toggle-row"><span>SHOTBOT</span><label class="switch"><input type="checkbox" onchange="notifyToggle(this, 'SHOTBOT')"><span class="slider-toggle"></span></label></div>
+  <div class="toggle-row"><span>AIMLOCK</span><label class="switch"><input type="checkbox" onchange="notifyToggle(this, 'AIMLOCK')"><span class="slider-toggle"></span></label></div>
+  <div class="toggle-row"><span>NORECOIL</span><label class="switch"><input type="checkbox" onchange="notifyToggle(this, 'NORECOIL')"><span class="slider-toggle"></span></label></div>
+  <div class="toggle-row"><span>AIMDRAG</span><label class="switch"><input type="checkbox" onchange="notifyToggle(this, 'AIMDRAG')"><span class="slider-toggle"></span></label></div>
+  <div class="toggle-row"><span>BUFFDEVICE</span><label class="switch"><input type="checkbox" onchange="notifyToggle(this, 'BUFFDEVICE')"><span class="slider-toggle"></span></label></div>
+  <div class="slider-container"><div>DPI</div><input type="range" min="1" max="2000" value="1000" oninput="updateSlider(this, 'dpiVal')"><div id="dpiVal">1000</div>
+<div style="margin-top:20px; width:100%;">
+  <h3>📱 Liên hệ của tôi</h3>
+  <table style="width:100%; border-collapse:collapse; color:#fff;">
+    <tr>
+      <td style="padding:8px;">TikTok</td>
+      <td style="padding:8px; text-align:right;">
+        <a href="https://www.tiktok.com/@minh.tr432?_t=ZS-8zmMFO7mb7V&_r=1" target="_blank" style="color:#ff2a2a; text-decoration:none;">Xem</a>
+      </td>
+    </tr>
+    <tr>
+      <td style="padding:8px;">Facebook</td>
+      <td style="padding:8px; text-align:right;">
+        <a href="https://www.facebook.com/share/19SQEhejTB/?mibextid=wwXIfr" target="_blank" style="color:#ff2a2a; text-decoration:none;">Xem</a>
+      </td>
+    </tr>
+    <tr>
+      <td style="padding:8px;">Zalo</td>
+      <td style="padding:8px; text-align:right;">
+        <a href="https://zalo.me/0822269369" target="_blank" style="color:#ff2a2a; text-decoration:none;">Xem</a>
+      </td>
+    </tr>
+  </table>
+</div>
+
+</div>
+</div>
+<div id="settingSection" class="section">
+  <h2>⚙️ SETTINGS</h2>
+  <button onclick="checkDPS()">CHECK DPS</button>
+  <div id="dpsResult"></div>
+  <button onclick="checkDevice()">📱 Kiểm tra thiết bị</button>
+  <div id="deviceInfo" style="margin-top: 10px; white-space: pre-wrap;"></div>
+
+
+<div id="mtricrackSection" class="section">
+  <h2>🔧 Mtricrack</h2>
+  <table style="width:100%; border-collapse:collapse; color:#fff;">
+    <tr>
+      <td style="padding:8px;">Aim Fake</td>
+      <td style="padding:8px; text-align:right;">
+        <label class="switch">
+          <input type="checkbox" id="mf_aimfake" onchange="notifyToggle(this, 'Aim Fake')">
+          <span class="slider-toggle"></span>
+        </label>
+      </td>
+    </tr>
+    <tr>
+      <td style="padding:8px;">Fix Rung</td>
+      <td style="padding:8px; text-align:right;">
+        <label class="switch">
+          <input type="checkbox" id="mf_fixrung" onchange="notifyToggle(this, 'Fix Rung')">
+          <span class="slider-toggle"></span>
+        </label>
+      </td>
+    </tr>
+    <tr>
+      <td style="padding:8px;">Fix Lố</td>
+      <td style="padding:8px; text-align:right;">
+        <label class="switch">
+          <input type="checkbox" id="mf_fixlo" onchange="notifyToggle(this, 'Fix Lố')">
+          <span class="slider-toggle"></span>
+        </label>
+      </td>
+    </tr>
+    <tr>
+      <td style="padding:8px;">Buff Màn</td>
+      <td style="padding:8px; text-align:right;">
+        <label class="switch">
+          <input type="checkbox" id="mf_buffman" onchange="notifyToggle(this, 'Buff Màn')">
+          <span class="slider-toggle"></span>
+        </label>
+      </td>
+    </tr>
+  </table>
+
+  <div style="display:flex; gap:10px; margin-top:12px; width:100%; justify-content:space-between;">
+    <button onclick="enableAllMtricrack()" style="flex:1; padding:8px; border-radius:8px; background:#222; color:#fff; border:1px solid #444;">Enable All</button>
+    <button onclick="disableAllMtricrack()" style="flex:1; padding:8px; border-radius:8px; background:#222; color:#fff; border:1px solid #444;">Disable All</button>
+  
+<div style="margin-top:20px; width:100%;">
+  <h3>📱 Liên hệ của tôi</h3>
+  <table style="width:100%; border-collapse:collapse; color:#fff;">
+    <tr>
+      <td style="padding:8px;">TikTok</td>
+      <td style="padding:8px; text-align:right;">
+        <a href="https://www.tiktok.com/@minh.tr432?_t=ZS-8zmMFO7mb7V&_r=1" target="_blank" style="color:#ff2a2a; text-decoration:none;">Xem</a>
+      </td>
+    </tr>
+    <tr>
+      <td style="padding:8px;">Facebook</td>
+      <td style="padding:8px; text-align:right;">
+        <a href="https://www.facebook.com/share/19SQEhejTB/?mibextid=wwXIfr" target="_blank" style="color:#ff2a2a; text-decoration:none;">Xem</a>
+      </td>
+    </tr>
+    <tr>
+      <td style="padding:8px;">Zalo</td>
+      <td style="padding:8px; text-align:right;">
+        <a href="https://zalo.me/0822269369" target="_blank" style="color:#ff2a2a; text-decoration:none;">Xem</a>
+      </td>
+    </tr>
+  </table>
+</div>
+
+</div>
+</div>
+
+  <div class="toggle-row"><span>Fix Rung</span><label class="switch"><input type="checkbox" id="mf_fixrung" onchange="notifyToggle(this, 'Fix Rung')"><span class="slider-toggle"></span></label></div>
+  <div class="toggle-row"><span>Fix Lố</span><label class="switch"><input type="checkbox" id="mf_fixlo" onchange="notifyToggle(this, 'Fix Lố')"><span class="slider-toggle"></span></label></div>
+  <div class="toggle-row"><span>Buff Màn</span><label class="switch"><input type="checkbox" id="mf_buffman" onchange="notifyToggle(this, 'Buff Màn')"><span class="slider-toggle"></span></label></div>
+  <div style="display:flex; gap:10px; margin-top:12px; width:100%; justify-content:space-between;">
+    <button onclick="enableAllMtricrack()" style="flex:1; padding:8px; border-radius:8px; background:#222; color:#fff; border:1px solid #444;">Enable All</button>
+    <button onclick="disableAllMtricrack()" style="flex:1; padding:8px; border-radius:8px; background:#222; color:#fff; border:1px solid #444;">Disable All</button>
+  
+<div style="margin-top:20px; width:100%;">
+  <h3>📱 Liên hệ của tôi</h3>
+  <table style="width:100%; border-collapse:collapse; color:#fff;">
+    <tr>
+      <td style="padding:8px;">TikTok</td>
+      <td style="padding:8px; text-align:right;">
+        <a href="https://www.tiktok.com/@minh.tr432?_t=ZS-8zmMFO7mb7V&_r=1" target="_blank" style="color:#ff2a2a; text-decoration:none;">Xem</a>
+      </td>
+    </tr>
+    <tr>
+      <td style="padding:8px;">Facebook</td>
+      <td style="padding:8px; text-align:right;">
+        <a href="https://www.facebook.com/share/19SQEhejTB/?mibextid=wwXIfr" target="_blank" style="color:#ff2a2a; text-decoration:none;">Xem</a>
+      </td>
+    </tr>
+    <tr>
+      <td style="padding:8px;">Zalo</td>
+      <td style="padding:8px; text-align:right;">
+        <a href="https://zalo.me/0822269369" target="_blank" style="color:#ff2a2a; text-decoration:none;">Xem</a>
+      </td>
+    </tr>
+  </table>
+</div>
+
+</div>
+</div>
+</div>
+
+<script>
+  function openMenu() {
+    document.getElementById("sideMenu").style.width = "200px";
+  }
+
+  function closeMenu() {
+    document.getElementById("sideMenu").style.width = "0";
+  }
+
+  function switchSection(section) {
+    // hide all sections then show the requested one
+    const secs = document.getElementsByClassName('section');
+    for (let i = 0; i < secs.length; i++) { secs[i].style.display = 'none'; }
+    const el = document.getElementById(section + 'Section');
+    if (el) el.style.display = (section === 'login' || section === 'loading') ? 'flex' : 'flex';
+    closeMenu();
+  }
+
+  function validateKey() {
+    const key = document.getElementById("keyInput").value;
+    if (key === "Minktrivipcrack") {
+      document.getElementById("loginSection").style.display = "none";
+      document.getElementById("loadingSection").style.display = "flex";
+      let p = 0;
+      const fill = document.getElementById("progressFill");
+      const txt = document.getElementById("loadingText");
+      const timer = setInterval(() => {
+        p++;
+        fill.style.width = p + "%";
+        txt.innerText = "Đang khởi chạy... " + p + "%";
+        if (p >= 100) {
+          clearInterval(timer);
+          document.getElementById("loadingSection").style.display = "none";
+          document.getElementById("mainSection").style.display = "flex";
+        }
+      }, 20);
+    } else {
+      alert("Sai key!");
+    }
+  }
+
+  function notifyToggle(el, name) {
+    const msg = el.checked ? `${name} ✅ đã bật` : `${name} ❌ đã tắt`;
+    const box = document.getElementById("notification");
+    box.innerText = msg;
+    box.style.display = "block";
+    setTimeout(() => box.style.display = "none", 2000);
+
+    // Âm thanh
+    const sound = el.checked ? document.getElementById("soundOn") : document.getElementById("soundOff");
+    sound.currentTime = 0;
+    sound.play();
+  }
+
+  function updateSlider(el, id) {
+    document.getElementById(id).innerText = el.value;
+  }
+
+  function checkDPS() {
+    const dps = Math.floor(Math.random() * (220 - 70 + 1)) + 70;
+    document.getElementById("dpsResult").innerText = `🔍 DPS hiện tại: ${dps}`;
+  }
+
+  function checkDevice() {
+    const ua = navigator.userAgent;
+    let device = "Không xác định";
+
+    if (/android/i.test(ua)) device = "Android";
+    else if (/iPad|iPhone|iPod/.test(ua)) device = "iOS";
+    else if (/Windows NT/.test(ua)) device = "Windows PC";
+    else if (/Macintosh/.test(ua)) device = "macOS";
+    else if (/Linux/.test(ua)) device = "Linux";
+
+    const browser = (() => {
+      if (ua.includes("Chrome")) return "Chrome";
+      if (ua.includes("Safari") && !ua.includes("Chrome")) return "Safari";
+      if (ua.includes("Firefox")) return "Firefox";
+      return "Trình duyệt khác";
+    })();
+
+    const resolution = `${screen.width}x${screen.height}`;
+
+    document.getElementById("deviceInfo").innerText = 
+      `📱 Thiết bị: ${device}\n🌐 Trình duyệt: ${browser}\n📏 Độ phân giải: ${resolution}`;
+  }
+</script>
+
+
+<script>
+  function enableAllMtricrack() {
+    const ids = ['mf_aimfake','mf_fixrung','mf_fixlo','mf_buffman'];
+    ids.forEach(id => {
+      const cb = document.getElementById(id);
+      if (cb && !cb.checked) { cb.checked = true; notifyToggle(cb, cb.parentElement.parentElement.querySelector('span').innerText); }
+    });
+  }
+  function disableAllMtricrack() {
+    const ids = ['mf_aimfake','mf_fixrung','mf_fixlo','mf_buffman'];
+    ids.forEach(id => {
+      const cb = document.getElementById(id);
+      if (cb && cb.checked) { cb.checked = false; notifyToggle(cb, cb.parentElement.parentElement.querySelector('span').innerText); }
+    });
+  }
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+<script>
+  particlesJS("particles-js", {
+    "particles": {
+      "number": { "value": 70 },
+      "color": { "value": "#ff2a2a" },
+      "shape": { "type": "circle" },
+      "opacity": { "value": 0.5 },
+      "size": { "value": 3, "random": true },
+      "line_linked": {
+        "enable": true,
+        "distance": 130,
+        "color": "#ff2a2a",
+        "opacity": 0.4,
+        "width": 1
+      },
+      "move": { "enable": true, "speed": 2 }
+    },
+    "interactivity": {
+      "events": {
+        "onhover": { "enable": true, "mode": "repulse" }
+      }
+    },
+    "retina_detect": true
+  });
+</script>
+
+</body>
+</html>
+
